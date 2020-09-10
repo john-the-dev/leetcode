@@ -48,6 +48,7 @@ class Solution:
 
     '''
     Performance improved version with: 1) sorting; 2) sliding window in sorted array. We can use sort and not increase complexity because sorting is O(nlog(n)) and we will have O(n^2) anyway for the total solution. Also note that we avoided using set to check duplicate output.
+    Complexity: O(n^2) for runtime, O(1) for storage. We have better storage complexity because we used sort.
     This version beats 77% of leetcode submissions on runtime and 44% on storage.
     '''
     def threeSum2(self, nums):
