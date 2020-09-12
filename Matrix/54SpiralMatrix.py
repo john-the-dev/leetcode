@@ -30,6 +30,7 @@ class Solution:
     Simulate spiral order: starting direction is right, keep going until reaching deadend and then turning right (down). Repeat this rule until all items are explored.
     Replace explored item with None and use it for deadend check.
     O(mn) runtime, O(1) storage.
+    Beat 59% runtime, 50% storage of all Leetcode submissions.
     '''
     def spiralOrder(self, matrix):
         m = len(matrix)
