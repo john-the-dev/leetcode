@@ -82,6 +82,6 @@ class Solution:
 
 # Tests.
 assert_call_sequence(globals(),["Solution","pickIndex"],[[[1]],[]],[[None,0]])
-assert_call_sequence(globals(),["Solution","pickIndex","pickIndex"],[[[1,3]],[],[],[],[],[]],[[None,1,1],[None,1,0],[None,0,1],[None,0,0]])
+assert_call_sequence(globals(),["Solution","pickIndex","pickIndex"],[[[1,3]],[],[]],[[None,1,1],[None,1,0],[None,0,1],[None,0,0]])
 
 

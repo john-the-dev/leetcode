@@ -27,7 +27,7 @@ The number of operations will be in the range of [1, 10000].
 Please do not use the built-in HashMap library.
 '''
 from common import *
-class Solution:
+class HashMap:
 
     def __init__(self):
         """
@@ -67,4 +67,4 @@ class Solution:
                 self.h[i].pop()
                 break
 
-assert_call_sequence(globals(),["Solution","put","put","get","get","put","get", "remove", "get"],[[],[1,1],[2,2],[1],[3],[2,1],[2],[2],[2]],[[None,None,None,1,-1,None,1,None,-1]])
+assert_call_sequence(globals(),["HashMap","put","put","get","get","put","get", "remove", "get"],[[],[1,1],[2,2],[1],[3],[2,1],[2],[2],[2]],[[None,None,None,1,-1,None,1,None,-1]])
