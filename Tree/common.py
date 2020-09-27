@@ -79,3 +79,16 @@ def assert_tree(root1, root2):
             assert(root2.right == None)
         else:
             assert_tree(root1.right, root2.right)
+
+# Assert a sequence of calls return expected results.
+def assert_call_sequence(context, calls, args, expected_outputs):
+    assert(len(calls) == len(args) == len(expected_outputs[0]))
+    assert(len(calls) >= 1)
+    output = []
+    # Default first item in calls is to create the class object of the solution and the remaining is to call methods of the object.
+    solution = context[calls[0]](*args[0])
+    output.append(None)
+    for i in range(1,len(calls)):
+        call = getattr(solution, calls[i])
+        output.append(call(*args[i]))
+    assert(output in expected_outputs)
