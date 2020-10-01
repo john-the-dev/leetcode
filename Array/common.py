@@ -16,3 +16,34 @@ def assert_call_sequence(context, calls, args, expected_outputs):
         call = getattr(solution, calls[i])
         output.append(call(*args[i]))
     assert(output in expected_outputs)
+
+class NestedInteger:
+    def __init__(self, item):
+        if isinstance(item, int):
+            self.type = 0
+            self.val = item
+        else:
+            self.type = 1
+            self.val = []
+            for i in item:
+                self.val.append(NestedInteger(i))
+
+    def isInteger(self):
+        """
+        @return True if this NestedInteger holds a single integer, rather than a nested list.
+        """
+        return self.type == 0
+
+    def getInteger(self):
+        """
+        @return the single integer that this NestedInteger holds, if it holds a single integer
+        Return None if this NestedInteger holds a nested list
+        """
+        return self.val if self.type == 0 else None
+
+    def getList(self):
+        """
+        @return the nested list that this NestedInteger holds, if it holds a nested list
+        Return None if this NestedInteger holds a single integer
+        """
+        return self.val if self.type == 1 else None
