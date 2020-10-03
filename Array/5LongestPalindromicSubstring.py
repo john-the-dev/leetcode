@@ -33,6 +33,7 @@ class Solution:
     Loop and expand from there to find longest palindrome.
     O(n^2) runtime, O(1) storage.
     Beat 63% runtime, 25% storage of all Leetcode submissions.
+    Note classic methods such as sliding window, stack not working on this problem. It is a special problem in which a good solution is actually O(n^2) complexity.
     '''
     def longestPalindrome(self, s):
         n,out = len(s),[0,-1]
