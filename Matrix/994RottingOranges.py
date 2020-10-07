@@ -39,7 +39,7 @@ from common import *
 class Solution:
     '''
     Breath first search.
-    O(mn) runtime, O(mn) storage.
+    O(mn) runtime, O(mn) storage. Note we have to add all rotten oranges to first layer. This is why the storage complexity is O(mn). Otherwise, it will be O(min(m,n)).
     Beat 99% runtime, 5% storage of all Leetcode submissions.
     '''
     def orangesRotting(self, grid: List[List[int]]) -> int:
