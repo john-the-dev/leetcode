@@ -50,7 +50,24 @@ class Solution:
             out.append(log)
         return out
 
+    '''
+    Use the sort() method with custom defined key.
+    O(MNlog(N)) runtime, O(MN) storage.
+    Beat 74% runtime, 17% storage of all Leetcode submissions.
+    '''
+    def reorderLogFiles2(self, logs: List[str]) -> List[str]:
+        def getkey(log):
+            id,rest = log.split(' ',maxsplit=1)
+            return [0,rest,id] if rest[0].isalpha() else [1,'','']
+        logs.sort(key=getkey)
+        return logs
+
+# Tests.
 assert(Solution().reorderLogFiles(["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]) == ["let1 art can","let3 art zero","let2 own kit dig","dig1 8 1 5 1","dig2 3 6"])
 assert(Solution().reorderLogFiles(["dig1 8 1 5 1"]) == ["dig1 8 1 5 1"])
 assert(Solution().reorderLogFiles([]) == [])
 assert(Solution().reorderLogFiles(["a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo","a2 act car"]) == ["a2 act car","g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"])  # Test when letter logs tie we need to use id to sort.
+assert(Solution().reorderLogFiles2(["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]) == ["let1 art can","let3 art zero","let2 own kit dig","dig1 8 1 5 1","dig2 3 6"])
+assert(Solution().reorderLogFiles2(["dig1 8 1 5 1"]) == ["dig1 8 1 5 1"])
+assert(Solution().reorderLogFiles2([]) == [])
+assert(Solution().reorderLogFiles2(["a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo","a2 act car"]) == ["a2 act car","g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"])  # Test when letter logs tie we need to use id to sort.
