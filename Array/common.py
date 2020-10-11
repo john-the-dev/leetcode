@@ -49,3 +49,16 @@ class NestedInteger:
         Return None if this NestedInteger holds a single integer
         """
         return self.val if self.type == 1 else None
+
+class DSU:
+    def __init__(self):
+        self.graph = {}
+    def find(self, id):
+        if id not in self.graph:
+            self.graph[id] = id
+        elif self.graph[id] != id:
+            self.graph[id] = self.find(self.graph[id])
+        return self.graph[id]
+    def union(self, id1, id2):
+        self.graph[self.find(id2)] = self.find(id1)
+    
