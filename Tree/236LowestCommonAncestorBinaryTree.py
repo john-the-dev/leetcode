@@ -42,7 +42,7 @@ from common import *
 class Solution:
     '''
     Recursion + global variable (ancestor). Through pre order traverse recursion to locate the node which contains p and q as child node or itself. Assign the first such node to ancestor.
-    O(n) runtime, O(log(n)) storage.
+    O(n) runtime, O(d) storage, in which n is # of nodes in the tree and d is depth of the tree.
     Beat 80% runtime, 5% storage of all Leetcode submissions. The low storage should be due to returning a pair of values, which does not change the complexity.
     '''
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
