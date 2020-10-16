@@ -34,6 +34,8 @@ class Codec:
                     new_layer.append(node.left)
                     new_layer.append(node.right)
             layer = new_layer
+        while out and out[-1] == 'null':
+            out.pop()
         return '[{}]'.format(','.join(out))
 
     def deserialize(self, data):
@@ -54,13 +56,15 @@ class Codec:
             else:
                 new_layer = []
                 for node in layer:
+                    if i >= n: break
                     j = data.find(',',i)
+                    if j == -1: j = n
                     k = data.find(',',j+1)
                     if k == -1: k = n
-                    if data[i:j] != 'null': 
+                    if j > i and data[i:j] != 'null': 
                         node.left = TreeNode(int(data[i:j]))
                         new_layer.append(node.left)
-                    if data[j+1:k] != 'null': 
+                    if k > j+1 and data[j+1:k] != 'null': 
                         node.right = TreeNode(int(data[j+1:k]))
                         new_layer.append(node.right)
                     i = k+1
