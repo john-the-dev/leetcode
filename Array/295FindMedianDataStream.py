@@ -35,6 +35,7 @@ class MedianFinder:
     Two priority queue (1 max queue and 1 min queue).
     O(log(n)) for addNum, O(1) for findMedian, O(n) storage for the class.
     Beat 95% runtime, 12% storage.
+    Note we do not optimize the storage here (storage same as naive solution) but toward optimize on computation (from O(nlog(n)) for finding median to O(log(n)) addNum, O(1) find median).
     For scenario in which most data are between 0 and 100, we can add a count to each item in priority queue and update the queues accordingly so to reduce storage use.
     '''
     def __init__(self):
