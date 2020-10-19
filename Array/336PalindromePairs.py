@@ -63,7 +63,31 @@ class Solution:
                 if i != j: out.add((i,j))
         return [list(p) for p in list(out)]
 
+    '''
+    Brute force solution.
+    O(n^2m) runtime, O(m) storage.
+    Time limit exceeded for long input.
+    '''
+    def palindromePairs2(self, words: List[str]) -> List[List[int]]:
+        n = len(words)
+        def isPalindrome(w):
+            i,j = 0,len(w)-1
+            while i < j:
+                if w[i] != w[j]: return False
+                i += 1
+                j -= 1
+            return True
+        out = []
+        for i in range(n):
+            for j in range(i+1,n):
+                if isPalindrome(words[i]+words[j]): out.append([i,j])
+                if isPalindrome(words[j]+words[i]): out.append([j,i])
+        return out
+
 # Tests.
 assert_list_noorder(Solution().palindromePairs(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
 assert_list_noorder(Solution().palindromePairs(["bat","tab","cat"]),[[0,1],[1,0]])
 assert_list_noorder(Solution().palindromePairs(["a",""]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs2(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
+assert_list_noorder(Solution().palindromePairs2(["bat","tab","cat"]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs2(["a",""]),[[0,1],[1,0]])
