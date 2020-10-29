@@ -45,6 +45,7 @@ class Solution:
     Build solution up until i based on solution up until i-1.
     O(n^2) runtime, O(1) storage.
     Beat 62% runtime, 99.9% storage of all Leetcode submissions.
+    Note trying to achieve O(nlog(n)) runtime is not practical.
     '''
     def pancakeSort(self, arr: List[int]) -> List[int]:
         i,n,out = 1,len(arr),[]
