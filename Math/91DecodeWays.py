@@ -57,6 +57,24 @@ class Solution:
             if v > 0 and v <= 26: dp[i+1] += dp[i-1]
         return dp[n]
 
+    '''
+    Further reduce storage use as dp[i] only depend on previous two items.
+    O(n) runtime, O(1) storage.
+    Beat 97% runtime, 5% storage of all Leetcode submissions.
+    Note the storage percentage of Leetcode is not accurate on a couple of submissions already. It's supposed to be a high percentage as we are O(1) here.
+    '''
+    def numDecodings2(self, s: str) -> int:
+        n = len(s)
+        prev0,prev1 = 1,1 if s[0] != '0' else 0
+        for i in range(1,n):
+            curr = 0
+            if s[i] != '0': curr += prev1
+            if s[i-1] != '0':  
+                v = int(s[i-1:i+1])
+                if v > 0 and v <= 26: curr += prev0
+            prev0,prev1 = prev1,curr
+        return prev1
+
 # Tests.
 assert(Solution().numDecodings("12") == 2)
 assert(Solution().numDecodings("226") == 3)
@@ -64,3 +82,9 @@ assert(Solution().numDecodings("0") == 0)
 assert(Solution().numDecodings("1") == 1)
 assert(Solution().numDecodings("227") == 2)
 assert(Solution().numDecodings("2101") == 1)
+assert(Solution().numDecodings2("12") == 2)
+assert(Solution().numDecodings2("226") == 3)
+assert(Solution().numDecodings2("0") == 0)
+assert(Solution().numDecodings2("1") == 1)
+assert(Solution().numDecodings2("227") == 2)
+assert(Solution().numDecodings2("2101") == 1)
