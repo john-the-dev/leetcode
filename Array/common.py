@@ -61,4 +61,10 @@ class DSU:
         return self.graph[id]
     def union(self, id1, id2):
         self.graph[self.find(id2)] = self.find(id1)
+
+class Trie:
+    def __init__(self, v):
+        self.v = v
+        self.children = {}
+        self.done = False
     

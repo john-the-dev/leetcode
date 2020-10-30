@@ -84,6 +84,52 @@ class Solution:
                 if isPalindrome(words[j]+words[i]): out.append([j,i])
         return out
 
+    '''
+    Further improve storage with Trie.
+    O(nm^2) runtime, O(nm^2) storage.
+    Beat 5% runtime, 6% storage of all Leetcode submissions. These numbers are not good relection of the improvement.
+    Note the palindrome word in Trie should be stored reversed so they share same prefix for source word.
+    '''
+    def palindromePairs3(self, words: List[str]) -> List[List[int]]:
+        fronts,rears = Trie(set()),Trie(set())
+        def isSubPalindrome(w,i,j):
+            while i < j:
+                if w[i] != w[j]: return False
+                i += 1
+                j -= 1
+            return True
+        def check(root,w):
+            node = root
+            for c in w:
+                if c not in node.children: return set()
+                node = node.children[c]
+            return node.v
+        def add(root,w,i):
+            node = root
+            for c in w:
+                if c not in node.children: node.children[c] = Trie(set())
+                node = node.children[c]
+            node.v.add(i)
+        for i,w in enumerate(words):
+            add(fronts,w,i)
+            add(rears,w,i)
+            m = len(w)
+            j,k = m-1,m-1
+            while j >= 0:
+                if isSubPalindrome(w,j,k): add(fronts,w[:j],i)
+                j -= 1
+            j,k = 0,0
+            while k < m:
+                if isSubPalindrome(w,j,k): add(rears,w[k+1:],i)
+                k += 1
+        out = set()
+        for i,w in enumerate(words):
+            for j in check(fronts,w[::-1]):
+                if i != j: out.add((j,i))
+            for j in check(rears,w[::-1]):
+                if i != j: out.add((i,j))
+        return [list(p) for p in list(out)]
+
 # Tests.
 assert_list_noorder(Solution().palindromePairs(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
 assert_list_noorder(Solution().palindromePairs(["bat","tab","cat"]),[[0,1],[1,0]])
@@ -91,3 +137,6 @@ assert_list_noorder(Solution().palindromePairs(["a",""]),[[0,1],[1,0]])
 assert_list_noorder(Solution().palindromePairs2(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
 assert_list_noorder(Solution().palindromePairs2(["bat","tab","cat"]),[[0,1],[1,0]])
 assert_list_noorder(Solution().palindromePairs2(["a",""]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs3(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
+assert_list_noorder(Solution().palindromePairs3(["bat","tab","cat"]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs3(["a",""]),[[0,1],[1,0]])
