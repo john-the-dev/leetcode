@@ -1,5 +1,4 @@
 # 68. Text Justification
-# Most recently asked: Airbnb, Oct 28, 2020, https://leetcode.com/discuss/interview-question/914253/airbnb-phone-interview
 '''
 Given an array of words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
 
