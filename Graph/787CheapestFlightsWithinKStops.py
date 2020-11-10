@@ -71,7 +71,6 @@ class Solution:
     '''
     def findCheapestPrice2(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
         h,visits,costs = defaultdict(list),[],[[sys.maxsize for j in range(K+1)] for i in range(n)]
-        costs[src][0] = 0
         visits.append((0,-1,src))
         for s,d,p in flights:
             h[s].append([d,p])
@@ -93,7 +92,6 @@ class Solution:
     '''
     def findCheapestPrice3(self, n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:
         h,visits,costs = defaultdict(list),[],[{} for i in range(n)]
-        costs[src][0] = 0
         visits.append((0,-1,src))
         for s,d,p in flights:
             h[s].append([d,p])
