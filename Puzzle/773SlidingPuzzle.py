@@ -92,7 +92,55 @@ class Solution:
                     moves[j] = move+1
         return -1
 
+    '''
+    Classic BFS
+    O(6!) runtime, O(6!) storage.
+    Beat 94% runtime, 100% storage of Leetcode submissions.
+    '''
+    def slidingPuzzle2(self, board: List[List[int]]) -> int:
+        def board2tuple(board):
+            out = []
+            for i in range(2):
+                for j in range(3):
+                    out.append(board[i][j])
+            return tuple(out)
+        def getnext(t):
+            arr = list(t)
+            i = 0
+            while i < 6 and t[i] != 0:
+                i += 1
+            temp,out = [],[]
+            j = i+1
+            if j != 3 and j != 6: temp.append(j)
+            j = i-1
+            if j != -1 and j != 2: temp.append(j)
+            temp.append((i+3) % 6)
+            for j in temp:
+                arr[i],arr[j] = arr[j],arr[i]
+                out.append(tuple(arr))
+                arr[i],arr[j] = arr[j],arr[i]
+            return out
+        start = board2tuple(board)
+        layer = [start]
+        seen,out,win = set(layer),0,(1,2,3,4,5,0)
+        if start == win: return out
+        while layer:
+            new_layer,out = [],out+1
+            for val in layer:
+                for item in getnext(val):
+                    if item == win: return out
+                    if item not in seen: 
+                        new_layer.append(item)
+                        seen.add(item)
+            layer = new_layer
+        return -1
+
+
 # Tests.
 assert(Solution().slidingPuzzle([[1,2,3],[4,0,5]]) == 1)
 assert(Solution().slidingPuzzle([[1,2,3],[5,4,0]]) == -1)
 assert(Solution().slidingPuzzle([[4,1,2],[5,0,3]]) == 5)
+assert(Solution().slidingPuzzle2([[1,2,3],[4,0,5]]) == 1)
+assert(Solution().slidingPuzzle2([[1,2,3],[5,4,0]]) == -1)
+assert(Solution().slidingPuzzle2([[4,1,2],[5,0,3]]) == 5)
+assert(Solution().slidingPuzzle2([[3,2,4],[1,5,0]]) == 14)
