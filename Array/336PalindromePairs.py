@@ -130,6 +130,98 @@ class Solution:
                 if i != j: out.add((i,j))
         return [list(p) for p in list(out)]
 
+    '''
+    Find list of valid suffix and prefix and check against their reverse.
+    O(nm^2) runtime, O(nm+m^2) storage.
+    Beat 82% runtime, 5% storage of all Leetcode submissions.
+    Note we avoided using set to remove duplicate in results with this approach.
+    '''
+    def palindromePairs4(self, words: List[str]) -> List[List[int]]:
+        h = {w:i for i,w in enumerate(words)}
+        def isValidSubPalindrome(w,i,j):
+            while i < j:
+                if w[i] != w[j]: return False
+                i,j = i+1,j-1
+            return True
+        def findValidSuffixes(w):
+            n,out = len(w),[]
+            for i in range(n):
+                if isValidSubPalindrome(w,0,i): out.append(w[i+1:])
+            return out
+        def findValidPrefixes(w):
+            n,out = len(w),[]
+            for i in range(n):
+                if isValidSubPalindrome(w,i,n-1): out.append(w[:i])
+            return out
+        out = []
+        for i,w in enumerate(words):
+            reversed = w[::-1]
+            if reversed in h and h[reversed] != i: out.append([i,h[reversed]])
+            for suffix in findValidSuffixes(w):
+                reversed = suffix[::-1]
+                if reversed in h: out.append([h[reversed],i])
+            for prefix in findValidPrefixes(w):
+                reversed = prefix[::-1]
+                if reversed in h: out.append([i,h[reversed]])
+        return out
+
+    '''
+    Further improve approach 4 with Trie.
+    O(nm^2) runtime, O(nm) storage.
+    Beat 8% runtime, 5% storage.
+    '''
+    def palindromePairs5(self, words: List[str]) -> List[List[int]]:
+        root = Trie(None)
+        reversed_root = Trie(None)
+        for i,w in enumerate(words):
+            node = root
+            for c in w:
+                if c not in node.children: node.children[c] = Trie(None)
+                node = node.children[c]
+            node.v = i
+            node = reversed_root
+            for j in range(len(w)-1,-1,-1):
+                c = w[j]
+                if c not in node.children: node.children[c] = Trie(None)
+                node = node.children[c]
+            node.v = i
+        def isValidSubPalindrome(w,i,j):
+            while i < j:
+                if w[i] != w[j]: return False
+                i,j = i+1,j-1
+            return True
+        def findValidSuffixes(w):
+            n,out = len(w),set()
+            for i in range(n):
+                if isValidSubPalindrome(w,0,i): out.add(n-i-1)
+            return out
+        def findValidPrefixes(w):
+            n,out = len(w),set()
+            for i in range(n):
+                if isValidSubPalindrome(w,i,n-1): out.add(i)
+            return out
+        def lookup(w,root,valid):
+            node = root
+            out = []
+            for i,c in enumerate(w):
+                if i in valid and node.v != None: out.append(node.v)
+                if c not in node.children: return out
+                node = node.children[c]
+            if len(w) in valid and node.v != None: out.append(node.v)
+            return out
+        out = []
+        for i,w in enumerate(words):
+            reversed,valid = w[::-1],set([len(w)])
+            for j in lookup(reversed,root,valid):
+                if j != i: out.append([i,j])
+            valid = findValidSuffixes(w)
+            for j in lookup(reversed,root,valid):
+                out.append([j,i])
+            valid = findValidPrefixes(w)
+            for j in lookup(w,reversed_root,valid):
+                out.append([i,j])
+        return out
+
 # Tests.
 assert_list_noorder(Solution().palindromePairs(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
 assert_list_noorder(Solution().palindromePairs(["bat","tab","cat"]),[[0,1],[1,0]])
@@ -140,3 +232,9 @@ assert_list_noorder(Solution().palindromePairs2(["a",""]),[[0,1],[1,0]])
 assert_list_noorder(Solution().palindromePairs3(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
 assert_list_noorder(Solution().palindromePairs3(["bat","tab","cat"]),[[0,1],[1,0]])
 assert_list_noorder(Solution().palindromePairs3(["a",""]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs4(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
+assert_list_noorder(Solution().palindromePairs4(["bat","tab","cat"]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs4(["a",""]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs5(["abcd","dcba","lls","s","sssll"]),[[0,1],[1,0],[3,2],[2,4]])
+assert_list_noorder(Solution().palindromePairs5(["bat","tab","cat"]),[[0,1],[1,0]])
+assert_list_noorder(Solution().palindromePairs5(["a",""]),[[0,1],[1,0]])
