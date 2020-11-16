@@ -27,6 +27,7 @@ class Solution:
     Move nums1 to right side, then merge nums1 and nums2 with two pointers.
     O(2m+n) runtime, O(1) storage.
     Beat 64% runtime, 45% storage of all Leetcode submissions.
+    Note that when moving the items in nums1 to right side, move from m-1 towards 0, because from 0 towards m-1 may result in unrecovarable items.
     '''
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
         """
