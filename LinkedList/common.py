@@ -1,9 +1,10 @@
 from typing import List  # This ensures the compile can accept Leetcode Python 3 syntax: https://leetcode.com/discuss/general-discussion/270755/in-python-3-the-parameter-type-define-list-always-reports-an-error-in-ide
 
 class ListNode:
-    def __init__(self, val=0, next=None):
+    def __init__(self, val=0, next=None, prev=None):
         self.val = val
         self.next = next
+        self.prev = prev
 def createLinkedListFromArray(arr):
     out,curr = None,None
     for val in arr:
