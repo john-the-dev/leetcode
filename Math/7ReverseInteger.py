@@ -43,8 +43,30 @@ class Solution:
         if neg: out = -out
         return 0 if out < low or out > high else out
 
+    '''
+    Non-floating version: check whether result floats by dividing boundary.
+    O(log(x)) runtime, O(1) storage.
+    Beat 72% runtime, 13% storage of all Leetcode submissions.
+    '''
+    def reverse2(self, x: int) -> int:
+        negHigh,posHigh,out,pos,x = 2**31,2**31-1,0,x >= 0,abs(x)
+        negHigh10,posHigh10 = negHigh // 10, posHigh // 10
+        while x != 0:
+            d = x % 10
+            x = x // 10
+            if pos:
+                if out > posHigh10 or (out == posHigh10 and d > 7): return 0
+            else:
+                if out > negHigh10 or (out == negHigh10 and d > 8): return 0
+            out = out*10+d
+        return out if pos else -out
+
 # Tests.
 assert(Solution().reverse(123) == 321)
 assert(Solution().reverse(-123) == -321)
 assert(Solution().reverse(120) == 21)
 assert(Solution().reverse(0) == 0)
+assert(Solution().reverse2(123) == 321)
+assert(Solution().reverse2(-123) == -321)
+assert(Solution().reverse2(120) == 21)
+assert(Solution().reverse2(0) == 0)
