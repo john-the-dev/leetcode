@@ -79,9 +79,46 @@ class Solution:
                 if not dfs(c): return ''
         return ''.join(out[::-1])
 
+    '''
+    2nd implementation, graph topological sort (graph, coloring, dfs)
+    O(V+E) runtime, O(V+E) storage.
+    Beat 24% runtime, 79% storage of all Leetcode submissions.
+    '''
+    def alienOrder2(self, words: List[str]) -> str:
+        graph,out = {},[]
+        for w in words:
+            for c in w:
+                if c not in graph: graph[c] = {'val': c, 'visit':-1, 'targets': set()}
+        for i in range(1,len(words)):
+            w1,w2 = words[i-1],words[i]
+            l1,l2 = len(w1),len(w2)
+            if l1 > l2 and w1[:l2] == w2: return ""
+            for j in range(min(l1,l2)):
+                if w2[j] != w1[j]: 
+                    graph[w1[j]]['targets'].add(w2[j])
+                    break
+        def dfs(node):
+            nonlocal out
+            if node['visit'] == 0: return False
+            if node['visit'] == 1: return True
+            node['visit'] = 0
+            for c in node['targets']:
+                if not dfs(graph[c]): return False
+            node['visit'] = 1
+            out.append(node['val'])
+            return True
+        for c in graph:
+            if not dfs(graph[c]): return ""
+        return ''.join(out[::-1])
+
 # Tests.
 assert(Solution().alienOrder(["wrt","wrf","er","ett","rftt"]) == "wertf")
 assert(Solution().alienOrder(["z","x"]) == "zx")
 assert(Solution().alienOrder(["z","x","z"]) == "")
 assert(Solution().alienOrder(["za","zb","ca","cb"]) == "abzc")
 assert(Solution().alienOrder(["abc","ab"]) == "")  # A letter should not proceed before empty.
+assert(Solution().alienOrder2(["wrt","wrf","er","ett","rftt"]) == "wertf")
+assert(Solution().alienOrder2(["z","x"]) == "zx")
+assert(Solution().alienOrder2(["z","x","z"]) == "")
+assert(Solution().alienOrder2(["za","zb","ca","cb"]) in set(["abzc","zcab"]))
+assert(Solution().alienOrder2(["abc","ab"]) == "")
