@@ -45,6 +45,7 @@ class Solution:
                 dp[j][i] = min(dp[j-1][i-1]+e,dp[j-1][i]+1,dp[j][i-1]+1)
         return dp[n2][n1]
 
+
 # Tests.
 assert(Solution().minDistance("horse", "ros") == 3)
 assert(Solution().minDistance("intention", "execution") == 5)
