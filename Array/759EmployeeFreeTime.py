@@ -37,10 +37,11 @@ class Interval:
 
 from common import *
 import sys
+import heapq
 class Solution:
     '''
     Calculate free time for each employee, then merge the free time.
-    O(N) runtime, O(N) storage, in which N is # of Intervals.
+    O(N^2) runtime, O(N) storage, in which N is # of Intervals.
     Beat 5% runtime, 86% storage of all Leetcode submissions.
     '''
     def employeeFreeTime(self, schedule: '[[Interval]]') -> '[Interval]':
@@ -74,6 +75,29 @@ class Solution:
             out = merge(out,freetime[i])
         return out
 
+    '''
+    Priority queue to find all busy intervals first, then compute free time.
+    O(Nlog(k)) runtime, O(k) storage, in which N is # of intervals, k is # of employees.
+    Beat 25% runtime, 76% storage of all Leetcode submissions.
+    '''
+    def employeeFreeTime2(self, schedule: '[[Interval]]') -> '[Interval]':
+        k = len(schedule)
+        q,out = [],[]
+        for i in range(k):
+            if len(schedule[i]) > 0: q.append([schedule[i][0].start,schedule[i][0].end,i,0])
+        heapq.heapify(q)
+        while q:
+            start,end,i,j = heapq.heappop(q)
+            if not out or out[-1][1] < start:
+                out.append([start,end])
+            else:
+                out[-1][1] = max(out[-1][1],end)
+            if j < len(schedule[i])-1: heapq.heappush(q,[schedule[i][j+1].start,schedule[i][j+1].end,i,j+1])
+        for i in range(1,len(out)):
+            out[i-1] = Interval(out[i-1][1],out[i][0])
+        if out: out.pop()
+        return out
+
 # Tests.
 def assert_out(expected_out, actual_out):
     assert(len(expected_out) == len(actual_out))
@@ -85,6 +109,12 @@ actual_out = Solution().employeeFreeTime([[Interval(1,2),Interval(5,6)],[Interva
 assert_out(expected_out, actual_out)
 expected_out = [Interval(5,6),Interval(7,9)]
 actual_out = Solution().employeeFreeTime([[Interval(1,3),Interval(6,7)],[Interval(2,4)],[Interval(2,5),Interval(9,12)]])
+assert_out(expected_out, actual_out)
+expected_out = [Interval(3,4)]
+actual_out = Solution().employeeFreeTime2([[Interval(1,2),Interval(5,6)],[Interval(1,3)],[Interval(4,10)]])
+assert_out(expected_out, actual_out)
+expected_out = [Interval(5,6),Interval(7,9)]
+actual_out = Solution().employeeFreeTime2([[Interval(1,3),Interval(6,7)],[Interval(2,4)],[Interval(2,5),Interval(9,12)]])
 assert_out(expected_out, actual_out)
 
                 
